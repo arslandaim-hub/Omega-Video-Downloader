@@ -29,7 +29,17 @@
 </p>
 -->
 ## Key Features
+Omega Video Downloader is a social video/audio downloader that can download videos from YouTube, FB and  Instgram 
 
+
+- Universal Platform Support: Videos can be downloaded from YouTube, Facebook and Instagram.
+- High-Resolution Downloads: Supports Multiple video/audio download quality options .
+- Integrated Private Locker: Securly lock your video/audio files easily in the app.
+- High-Quality Audio Extraction: Supports Audio only downloads.
+- Advanced Download Manager: Handles multiple concurrent downloads.
+- Gesture-Controlled Player: Built-in player featuring intuitive brightness, volume, and seek gestures.
+- Premium Modern UI: A beautiful "glassmorphism" interface.
+- Privacy Focused: No accounts required and no tracking; your data and downloaded content remain entirely under your control.
 
 
 ## Screenshots
