@@ -1,7 +1,7 @@
 <table align="center">
   <tr>
     <td>
-      <img src="" alt="PlayTube Icon" width="50">
+      <img src="fastlane/metadata/android/en-US/images/icon.png" alt="PlayTube Icon" width="50">
     </td>
     <td>
       <h1 style="margin: 0;">Omega Video Downloader</h1>
@@ -10,7 +10,8 @@
 </table>
 
 <p align="center">
-  Fast, private social video downloader with simple modern UI and with no ads.
+  Omega Video Downloader is a social video/audio downloader that can download videos from YouTube, FB and Instgram.
+  It is Fast, private with simple modern UI and with no ads, tracking or data collection.
 </p>
 <!--
 ## Download
@@ -28,9 +29,8 @@
 </a>
 </p>
 -->
-## Key Features
-Omega Video Downloader is a social video/audio downloader that can download videos from YouTube, FB and  Instgram 
 
+## Key Features
 
 - Universal Platform Support: Videos can be downloaded from YouTube, Facebook and Instagram.
 - High-Resolution Downloads: Supports Multiple video/audio download quality options .
@@ -41,11 +41,13 @@ Omega Video Downloader is a social video/audio downloader that can download vide
 - Premium Modern UI: A beautiful "glassmorphism" interface.
 - Privacy Focused: No accounts required and no tracking; your data and downloaded content remain entirely under your control.
 
-
 ## Screenshots
 
-<img src="fastlane/metadata/android/en-US/Images/phoneScreenshots/home.png" width="130">
-<img src="fastlane/metadata/android/en-US/Images/phoneScreenshots/screenshot-1.png" width="130">
-<img src="fastlane/metadata/android/en-US/Images/phoneScreenshots/screenshot-5.png" width="130">
-<img src="fastlane/metadata/android/en-US/Images/phoneScreenshots/blacktheme.png" width="130">
-
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/file_homescreen.png"
+  width="130">
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/file_locker.png" 
+  width="130">
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/file_settings.png" 
+  width="130">
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/file_downloads.png" 
+  width="130">
