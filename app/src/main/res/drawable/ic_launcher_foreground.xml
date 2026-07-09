@@ -1,0 +1,60 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Group to handle scaling and centering for the 66dp Safe Zone -->
+    <!-- Centering around x=46, y=54 in the coordinate space -->
+    <group
+        android:translateX="19.5"
+        android:translateY="13.5"
+        android:scaleX="0.75"
+        android:scaleY="0.75">
+
+        <!-- Subtle Outer Glow Layer -->
+        <path
+            android:pathData="M78,68.5 C81.5,62.5 83.5,55.5 83.5,48 C83.5,27.3 66.7,10.5 46,10.5 C25.3,10.5 8.5,27.3 8.5,48 C8.5,55.5 10.5,62.5 14,68.5 C19.5,78 20.5,81 18,84.5 L9,84.5 L9,95.5 L34.5,95.5 L34.5,84.5 L26,84.5 C28.5,76 24.5,69 21.5,64 C19,59.5 17.5,54 17.5,48 C17.5,32.3 30.3,19.5 46,19.5 C61.7,19.5 74.5,32.3 74.5,48 C74.5,54 73,59.5 70.5,64 C67.5,69 63.5,76 66,84.5 L57.5,84.5 L57.5,95.5 L83,95.5 L83,84.5 L74,84.5 C71.5,81 72.5,78 78,68.5 Z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:centerX="46"
+                    android:centerY="48"
+                    android:gradientRadius="45"
+                    android:type="radial">
+                    <item android:color="#3358A6FF" android:offset="0.0" />
+                    <item android:color="#0058A6FF" android:offset="1.0" />
+                </gradient>
+            </aapt:attr>
+        </path>
+
+        <!-- Main Omega Symbol -->
+        <path
+            android:pathData="M76,67.5 C79,62 81,55.5 81,49 C81,30.2 65.3,15 46,15 C26.7,15 11,30.2 11,49 C11,55.5 13,62 16,67.5 C21,76.5 22,79.5 19.5,83 L11.5,83 L11.5,92 L33,92 L33,83 L27,83 C29,75.5 25.5,69 22.5,64 C20.5,60 19,55 19,49 C19,34.1 31.1,22 46,22 C60.9,22 73,34.1 73,49 C73,55 71.5,60 69.5,64 C66.5,69 63,75.5 65,83 L59,83 L59,92 L80.5,92 L80.5,83 L72.5,83 C70,79.5 71,76.5 76,67.5 Z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:endX="46"
+                    android:endY="92"
+                    android:startX="46"
+                    android:startY="15"
+                    android:type="linear">
+                    <item android:color="#FFFFFFFF" android:offset="0.0" />
+                    <item android:color="#CCFFFFFF" android:offset="1.0" />
+                </gradient>
+            </aapt:attr>
+        </path>
+
+        <!-- High-gloss Reflection -->
+        <path
+            android:pathData="M46,15 C26.7,15 11,30.2 11,49 C11,51 11.2,53 11.5,55 C14,35 30,22 46,22 C62,22 78,35 80.5,55 C80.8,53 81,51 81,49 C81,30.2 65.3,15 46,15 Z"
+            android:fillColor="#22FFFFFF" />
+
+        <!-- Download Arrow Symbol -->
+        <path
+            android:pathData="M46,35 L46,65 M36,55 L46,65 L56,55"
+            android:strokeWidth="5"
+            android:strokeColor="#FFFFFF"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+    </group>
+</vector>

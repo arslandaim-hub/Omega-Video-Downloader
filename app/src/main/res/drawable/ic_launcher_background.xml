@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Base Deep Space Gradient -->
+    <path android:pathData="M0,0h108v108h-108z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="108"
+                android:endY="108"
+                android:startX="0"
+                android:startY="0"
+                android:type="linear">
+                <item android:color="#FF0F111A" android:offset="0.0" />
+                <item android:color="#FF05060A" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Deep Indigo Highlight (Top Right) -->
+    <path android:pathData="M0,0h108v108h-108z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:centerX="80"
+                android:centerY="25"
+                android:gradientRadius="70"
+                android:type="radial">
+                <item android:color="#441E2235" android:offset="0.0" />
+                <item android:color="#001E2235" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Subtle Violet Glow (Bottom Left) -->
+    <path android:pathData="M0,0h108v108h-108z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:centerX="25"
+                android:centerY="85"
+                android:gradientRadius="60"
+                android:type="radial">
+                <item android:color="#332D1B4D" android:offset="0.0" />
+                <item android:color="#002D1B4D" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+</vector>
