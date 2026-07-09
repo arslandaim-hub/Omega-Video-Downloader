@@ -1,13 +1,13 @@
-Omega Video Downloader is the ultimate tool for capturing and organizing your favorite media from across the web. Designed with performance and privacy in mind, it provides a seamless experience for downloading videos in high quality and keeping them secure.
+Omega Video Downloader is a simple, easy to use social media video downloading app with material design 3.
+App is ad free, no tracking or whatsoever. Uses yt-dlp to extract URL to download a video.
 
 Core Functionalities:
-- Universal Platform Support: Effortlessly download videos from YouTube, Facebook, Instagram, Twitter (X), and many other popular platforms.
-- High-Resolution Downloads: Choose your preferred quality, ranging from mobile-friendly 360p up to breathtaking 4K resolution.
-- Integrated Private Locker: Secure your sensitive videos in a PIN-protected, encrypted locker that stays strictly on your device.
-- High-Quality Audio Extraction: Convert any video directly into a high-fidelity MP3 or audio file with one tap.
-- Advanced Download Manager: Handle multiple concurrent downloads with real-time progress tracking and automated gallery saving.
-- Gesture-Controlled Player: Watch your media instantly with a built-in player featuring intuitive brightness, volume, and seek gestures.
-- Premium Modern UI: A beautiful "glassmorphism" interface optimized for speed, featuring haptic feedback and buttery-smooth navigation.
-- Privacy Focused: No accounts required and no tracking; your data and downloaded content remain entirely under your control.
 
-Omega Video Downloader is open-source and built for users who demand both power and privacy in their media management.
+- Universal Platform Support: Videos can be downloaded from YouTube, Facebook and Instagram.
+- High-Resolution Downloads: Supports Multiple video/audio download quality options .
+- Integrated Private Locker: Securly lock your video/audio files easily in the app.
+- High-Quality Audio Extraction: Supports Audio only downloads.
+- Advanced Download Manager: Handles multiple concurrent downloads.
+- Gesture-Controlled Player: Built-in player featuring intuitive brightness, volume, and seek gestures.
+- Premium Modern UI: A beautiful "glassmorphism" interface.
+- Privacy Focused: No accounts required and no tracking; your data and downloaded content remain entirely under your control.
