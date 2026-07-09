@@ -1,1 +1,1 @@
-Social video downloader with a secure private locker and 4K support.
+Social video downloader with a secure private locker and simple modern UI.
