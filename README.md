@@ -13,22 +13,24 @@
   Omega Video Downloader is a social video/audio downloader that can download videos from YouTube, FB and Instgram.
   It is Fast, private with simple modern UI and with no ads, tracking or data collection.
 </p>
-<!--
+
 ## Download
 <p align="center">
 <a href="https://github.com/arslandaim-hub/Omega-Video-Downloader/releases/latest">
   <img src="https://img.shields.io/badge/GET%20IT%20ON-GitHub-000000?style=for-the-badge&logo=github&logoColor=white" alt="Get it on GitHub">
 </a>
+  <!--
 <br><br>
-<a href="https://f-droid.org/packages/com.arslandaim.playtube/">
+<a href="https://f-droid.org/packages/com.arslandaim.omega-video-downloader/">
   <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" width="220" alt="Get it on F-Droid">
 </a>
+  -->
 <br><br>
-<a href="https://github.com/arslandaim-hub/PlayTube/releases/latest">
-  <img src="https://img.shields.io/github/downloads/arslandaim-hub/PlayTube/total?style=for-the-badge&logo=github&label=GitHub%20Downloads" alt="GitHub Downloads">
+<a href="https://github.com/arslandaim-hub/omega-video-downloader/releases/latest">
+  <img src="https://img.shields.io/github/downloads/arslandaim-hub/omega-video-downloader/total?style=for-the-badge&logo=github&label=GitHub%20Downloads" alt="GitHub Downloads">
 </a>
 </p>
--->
+
 
 ## Key Features
 
@@ -51,3 +53,6 @@
   width="130">
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/file_downloads.png" 
   width="130">
+
+**NOTE:** Before downloading anything in the app please first download cookies of your browser as txt file and import it into 'Import Cookies' button in settings.
+         This 100% makes sure URL scapping isn't blocked. Otherwise video fetching may fail.
