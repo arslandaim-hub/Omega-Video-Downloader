@@ -17,7 +17,7 @@ Built with a modern Material Design interface, completely ad-free, with no track
 </p>
 
 
-**📥 Download**
+** Download**
 
 <p align="center">
 <a href="https://github.com/arslandaim-hub/omega-video-downloader/releases/latest">
@@ -34,7 +34,7 @@ Built with a modern Material Design interface, completely ad-free, with no track
 </a>
 </p>
 
-**✨ Key Features**
+** Key Features**
 
 - Universal Platform Support — Download videos from YouTube, Facebook, and Instagram.
 - High-Resolution Downloads — Choose from multiple video and audio quality options.
@@ -47,7 +47,7 @@ Built with a modern Material Design interface, completely ad-free, with no track
 
 
 
-**🏗️ Architecture**
+** Architecture**
 
 Most downloaders are DUMB—they just look at a website's text and search for anything ending in .mp4 and they fail.
 O-V-D uses (Site-Specific Extractors) which is a much smarter logic:
@@ -77,7 +77,7 @@ Bundling these powerful components increases the APK size to over 200 MB, but it
 
 
 
-**📱 Screenshots**
+** Screenshots**
 
 <p align="center">
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/file_homescreen.png" width="130">
