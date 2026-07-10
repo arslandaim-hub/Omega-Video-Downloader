@@ -17,7 +17,7 @@ Built with a modern Material Design interface, completely ad-free, with no track
 </p>
 
 
-** Download**
+### Download
 
 <p align="center">
 <a href="https://github.com/arslandaim-hub/omega-video-downloader/releases/latest">
@@ -34,7 +34,7 @@ Built with a modern Material Design interface, completely ad-free, with no track
 </a>
 </p>
 
-** Key Features**
+### Key Features
 
 - Universal Platform Support — Download videos from YouTube, Facebook, and Instagram.
 - High-Resolution Downloads — Choose from multiple video and audio quality options.
@@ -47,37 +47,31 @@ Built with a modern Material Design interface, completely ad-free, with no track
 
 
 
-** Architecture**
+### Architecture
 
 Most downloaders are DUMB—they just look at a website's text and search for anything ending in .mp4 and they fail.
 O-V-D uses (Site-Specific Extractors) which is a much smarter logic:
 
-WHAT "O-V-D" DOES:
+#### WHAT "O-V-D" DOES:
 
-- Mimics a Browser:
+- **Mimics a Browser**:
 Instead of just looking at the page, it acts like a real person using a browser. It can solve the puzzles (signatures) that YouTube uses to block bots.
 
-- Accesses Hidden APIs:
+- **Accesses Hidden APIs:**
 It doesn't just scrape the website you see; it talks to the hidden private APIs that the official apps use. This is how it gets high-quality 4K video when others only see 720p.
 
-- Dynamic Adaptation:
+- **Dynamic Adaptation:**
 There are over 1,000 specific scripts inside the app, each dedicated to a different website. If Instagram changes how its site works today, the library is updated with new logic specifically for Instagram's new layout.
 
-- JS Reverse Engineering:
+- **JS Reverse Engineering:**
 Many sites hide their video links behind complex JavaScript code. O-V-D's logic is capable of reading and reverse-engineering that code to find the secret link that simple regex downloaders will never see.
 
 O-V-D uses 3 heavy tools yt-dlp, FFmpeg and Aria2c. All of these increase the size of apk file to over 200MBs. But, it's worth it!
 
-Note: Must download cookies.txt file of any brower using Chrome Cookies Extractor Extension and import it in app's settings.
+**Note**: Must download cookies.txt file of any brower using Chrome Cookies Extractor Extension and import it in app's settings.
 Core Components
 
-**Note**
-
-Bundling these powerful components increases the APK size to over 200 MB, but it enables significantly better compatibility, higher download success rates, improved media quality, and a far more reliable downloading experience.»
-
-
-
-** Screenshots**
+### Screenshots
 
 <p align="center">
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/file_homescreen.png" width="130">
