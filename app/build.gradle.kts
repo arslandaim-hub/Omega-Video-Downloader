@@ -27,6 +27,7 @@ android {
             )
         }
     }
+/*
     splits {
         abi {
             isEnable = true
@@ -35,6 +36,7 @@ android {
             isUniversalApk = true
         }
     }
+*/
     packaging {
         jniLibs {
             useLegacyPackaging = true
