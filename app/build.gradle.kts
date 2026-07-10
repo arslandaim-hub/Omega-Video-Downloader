@@ -15,12 +15,6 @@ android {
         versionName = "1.7.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
-        ndk {
-            abiFilters.add("x86")
-            abiFilters.add("x86_64")
-            abiFilters.add("armeabi-v7a")
-            abiFilters.add("arm64-v8a")
-        }
     }
 
     buildTypes {
@@ -31,6 +25,14 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+    }
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+            isUniversalApk = true
         }
     }
     packaging {
