@@ -2073,7 +2073,10 @@ fun SettingsScreen(settingsManager: SettingsManager, onBack: () -> Unit) {
                                     Spacer(modifier = Modifier.height(16.dp))
                                     
                                     Button(
-                                        onClick = { /* Future GitHub Link */ },
+                                        onClick = {
+                                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/arslandaim-hub/Omega-Video-Downloader"))
+                                            context.startActivity(intent)
+                                        },
                                         modifier = Modifier.fillMaxWidth(),
                                         colors = ButtonDefaults.buttonColors(
                                             containerColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.1f),
