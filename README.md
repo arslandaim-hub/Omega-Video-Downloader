@@ -14,9 +14,10 @@
 </table><p align="center">
 A fast, privacy-focused social media video and audio downloader for <strong>YouTube</strong>, <strong>Facebook</strong>, and <strong>Instagram</strong>.<br>
 Built with a modern Material Design interface, completely ad-free, with no tracking or data collection.
-</p>---
+</p>
 
-📥 Download**
+
+**📥 Download**
 
 <p align="center">
 <a href="https://github.com/arslandaim-hub/omega-video-downloader/releases/latest">
@@ -31,9 +32,9 @@ Built with a modern Material Design interface, completely ad-free, with no track
 <a href="https://github.com/arslandaim-hub/omega-video-downloader/releases/latest">
   <img src="https://img.shields.io/github/downloads/arslandaim-hub/omega-video-downloader/total?style=for-the-badge&logo=github&label=GitHub%20Downloads" alt="GitHub Downloads">
 </a>
-</p>---
+</p>
 
-**✨ Featuresf**
+**✨ Key Features**
 
 - Universal Platform Support — Download videos from YouTube, Facebook, and Instagram.
 - High-Resolution Downloads — Choose from multiple video and audio quality options.
@@ -44,42 +45,37 @@ Built with a modern Material Design interface, completely ad-free, with no track
 - Modern Glassmorphism UI — Clean, elegant, and intuitive Material Design interface.
 - Privacy First — No account required, no advertisements, no tracking, and no data collection.
 
----
+
 
 **🏗️ Architecture**
 
-Omega Video Downloader is built on a robust download engine rather than simple webpage scraping. While many conventional downloaders rely on basic pattern matching to locate media files, Omega Video Downloader uses site-specific extractors that understand how each supported platform delivers its content.
+Most downloaders are DUMB—they just look at a website's text and search for anything ending in .mp4 and they fail.
+O-V-D uses (Site-Specific Extractors) which is a much smarter logic:
 
-Browser Emulation
+WHAT "O-V-D" DOES:
 
-The extractor engine behaves like a real web browser instead of simply reading a webpage's source. It can process platform-specific authentication mechanisms and dynamically generated signatures required by services such as YouTube.
+- Mimics a Browser:
+Instead of just looking at the page, it acts like a real person using a browser. It can solve the puzzles (signatures) that YouTube uses to block bots.
 
-Site-Specific Extractors
+- Accesses Hidden APIs:
+It doesn't just scrape the website you see; it talks to the hidden private APIs that the official apps use. This is how it gets high-quality 4K video when others only see 720p.
 
-The application includes an extensive collection of dedicated extractors, each designed for a specific website. When a platform changes its internal structure or delivery mechanism, only the corresponding extractor needs to be updated, allowing the downloader to adapt quickly without affecting support for other services.
+- Dynamic Adaptation:
+There are over 1,000 specific scripts inside the app, each dedicated to a different website. If Instagram changes how its site works today, the library is updated with new logic specifically for Instagram's new layout.
 
-Private API Integration
+- JS Reverse Engineering:
+Many sites hide their video links behind complex JavaScript code. O-V-D's logic is capable of reading and reverse-engineering that code to find the secret link that simple regex downloaders will never see.
 
-Whenever supported, the extractor communicates with the same private APIs used by official applications instead of relying solely on visible webpage content. This enables access to higher-quality media streams and additional metadata that basic webpage scraping often cannot discover.
+O-V-D uses 3 heavy tools yt-dlp, FFmpeg and Aria2c. All of these increase the size of apk file to over 200MBs. But, it's worth it!
 
-JavaScript Analysis
-
-Many modern websites generate media URLs dynamically using complex JavaScript. Omega Video Downloader's extraction engine can analyze and reverse-engineer this logic to locate media sources that simple regular-expression or HTML-based downloaders are unable to detect.
-
+Note: Must download cookies.txt file of any brower using Chrome Cookies Extractor Extension and import it in app's settings.
 Core Components
 
-Omega Video Downloader is powered by three industry-standard open-source tools:
-
-Component| Purpose
-yt-dlp| Advanced media extraction engine with support for thousands of websites.
-FFmpeg| Media processing, format conversion, merging, and audio extraction.
-aria2c| High-performance multi-connection download manager for faster and more reliable downloads.
-
-**«Note**
+**Note**
 
 Bundling these powerful components increases the APK size to over 200 MB, but it enables significantly better compatibility, higher download success rates, improved media quality, and a far more reliable downloading experience.»
 
----
+
 
 **📱 Screenshots**
 
@@ -88,14 +84,13 @@ Bundling these powerful components increases the APK size to over 200 MB, but it
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/file_locker.png" width="130">
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/file_settings.png" width="130">
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/file_downloads.png" width="130">
-</p>---
+</p>
 
 **⚠️ Important**
 
-Before downloading content, export your browser cookies as a ".txt" file and import them using the Import Cookies option in Settings.
+Before downloading videos, Download Cookies.txt file from any browser app using Chrome cookies extractor extension and import it using the Import Cookies option in Settings.
 
-This helps prevent video extraction from being blocked by supported websites and significantly improves download reliability. Without imported cookies, fetching videos may fail for some content.
- 
+This helps prevent video extraction from being blocked by supported websites and significantly improves download reliability. Without imported cookies, fetching videos may fail. 
 
 
   <!--
