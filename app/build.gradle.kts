@@ -11,13 +11,25 @@ android {
         applicationId = "com.arslandaim.omegavideodownloader"
         minSdk = 25
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.7.2"
+        versionCode = 4
+        versionName = "1.7.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
-        ndk {
-            abiFilters.add("armeabi-v7a")
-            abiFilters.add("arm64-v8a")
+        // F-Droid ABI Split Logic
+        val buildAbi = project.findProperty("buildAbi") as? String
+        if (buildAbi != null) {
+            ndk {
+                abiFilters.add(buildAbi)
+            }
+            // Assign unique version codes for F-Droid (e.g., 41 for 32-bit, 42 for 64-bit)
+            val abiCode = if (buildAbi == "arm64-v8a") 2 else 1
+            versionCode = (versionCode ?: 4) * 10 + abiCode
+        } else {
+            // Fallback for your local Android Studio testing
+            ndk {
+                abiFilters.add("armeabi-v7a")
+                abiFilters.add("arm64-v8a")
+            }
         }
     }
 
