@@ -84,9 +84,8 @@ Core Components
 
 **⚠️ Important**
 
-Before downloading videos, Download Cookies.txt file from any browser app using Chrome cookies extractor extension and import it using the Import Cookies option in app settings.
-
-This helps prevent video extraction from being blocked by supported websites and significantly improves download reliability. Without imported cookies, fetching videos may fail. 
+Importing cookies.txt file in app settings makes app effectively bypass bot detection.
+This helps prevent video extraction from being blocked by supported websites and significantly improves download reliability. Without imported cookies, some links may fail. 
 
 
   <!--
