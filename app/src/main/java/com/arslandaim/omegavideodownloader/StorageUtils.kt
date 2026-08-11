@@ -134,4 +134,33 @@ object StorageUtils {
             return null
         }
     }
+
+    fun calculateFolderSize(file: File): Long {
+        var length: Long = 0
+        val files = file.listFiles()
+        if (files != null) {
+            for (f in files) {
+                length += if (f.isFile) f.length() else calculateFolderSize(f)
+            }
+        }
+        return length
+    }
+
+    fun formatSize(bytes: Long): String {
+        if (bytes <= 0) return "0.0 MB"
+        val units = arrayOf("B", "KB", "MB", "GB", "TB")
+        val digitGroups = (Math.log10(bytes.toDouble()) / Math.log10(1024.0)).toInt()
+        return String.format(java.util.Locale.US, "%.1f %s", bytes / Math.pow(1024.0, digitGroups.toDouble()), units[digitGroups])
+    }
+
+    fun getAvailableInternalStorage(context: Context): Long {
+        val stat = android.os.StatFs(context.filesDir.path)
+        return stat.availableBytes
+    }
+
+    fun hasEnoughSpace(context: Context, requiredBytes: Long): Boolean {
+        // Add 50MB buffer
+        val buffer = 50 * 1024 * 1024L
+        return getAvailableInternalStorage(context) > (requiredBytes + buffer)
+    }
 }

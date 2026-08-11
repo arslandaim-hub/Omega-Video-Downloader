@@ -11,8 +11,8 @@ android {
         applicationId = "com.arslandaim.omegavideodownloader"
         minSdk = 25
         targetSdk = 35
-        versionCode = 4
-        versionName = "1.7.3"
+        versionCode = 5
+        versionName = "1.7.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
         // F-Droid ABI Split Logic

@@ -47,6 +47,7 @@ class SettingsManager(private val context: Context) {
 
         private val THEME_KEY = stringPreferencesKey("theme_mode")
         private val LANGUAGE_KEY = stringPreferencesKey("app_language")
+        private val AUTO_UPDATE_YTDLP_KEY = booleanPreferencesKey("auto_update_ytdlp")
         private val DOWNLOADS_KEY = stringPreferencesKey("downloaded_videos")
         private val LOCKER_PIN_KEY = stringPreferencesKey("locker_pin")
         private val SECURITY_QUESTION_KEY = stringPreferencesKey("security_question")
@@ -167,6 +168,10 @@ class SettingsManager(private val context: Context) {
         preferences[LANGUAGE_KEY] ?: "English (US)"
     }
 
+    val autoUpdateYtDlp: Flow<Boolean> = context.dataStore.data.map { preferences ->
+        preferences[AUTO_UPDATE_YTDLP_KEY] ?: true
+    }
+
     val downloadedVideos: Flow<List<DownloadedVideo>> = context.dataStore.data.map { preferences ->
         val json = preferences[DOWNLOADS_KEY] ?: "[]"
         try {
@@ -200,6 +205,12 @@ class SettingsManager(private val context: Context) {
     suspend fun setAppLanguage(language: String) = withContext(Dispatchers.IO) {
         context.dataStore.edit { preferences ->
             preferences[LANGUAGE_KEY] = language
+        }
+    }
+
+    suspend fun setAutoUpdateYtDlp(enabled: Boolean) = withContext(Dispatchers.IO) {
+        context.dataStore.edit { preferences ->
+            preferences[AUTO_UPDATE_YTDLP_KEY] = enabled
         }
     }
 
@@ -239,7 +250,15 @@ class SettingsManager(private val context: Context) {
         }
     }
 
-    fun updateLocalDownload(id: Long, title: String, progress: Float, totalBytes: Long, downloadedBytes: Long, type: String = "video") {
+    fun updateLocalDownload(
+        id: Long, 
+        title: String, 
+        progress: Float, 
+        totalBytes: Long, 
+        downloadedBytes: Long, 
+        type: String = "video",
+        playlistProgress: String? = null
+    ) {
         _localActiveDownloads.update { current ->
             val next = current.toMutableMap()
             next[id] = ActiveDownload(
@@ -250,7 +269,8 @@ class SettingsManager(private val context: Context) {
                 downloadedBytes = downloadedBytes,
                 status = "Downloading",
                 thumbnailUrl = null,
-                type = type
+                type = type,
+                playlistProgress = playlistProgress
             )
             next
         }

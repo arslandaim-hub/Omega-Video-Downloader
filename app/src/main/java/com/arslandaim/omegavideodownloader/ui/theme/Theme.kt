@@ -7,6 +7,7 @@ package com.arslandaim.omegavideodownloader.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -41,6 +42,14 @@ private val LightColorScheme = lightColorScheme(
     onBackground = Color.Black,
     onSurface = Color.Black
 )
+
+val ColorScheme.glassBackground: Color
+    @Composable
+    get() = if (isSystemInDarkTheme()) Color.Black.copy(alpha = 0.5f) else Color.White.copy(alpha = 0.5f)
+
+val ColorScheme.glassBorder: Color
+    @Composable
+    get() = if (isSystemInDarkTheme()) Color.White.copy(alpha = 0.1f) else Color.Black.copy(alpha = 0.1f)
 
 @Composable
 fun OmegaVideoDownloaderTheme(

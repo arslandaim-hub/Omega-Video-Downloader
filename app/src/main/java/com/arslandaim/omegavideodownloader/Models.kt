@@ -23,6 +23,8 @@ data class VideoMetadata(
     val qualities: List<VideoQuality>,
     val audioQualities: List<VideoQuality> = emptyList(),
     val thumbnailUrl: String? = null,
+    val isPlaylist: Boolean = false,
+    val playlistCount: Int? = null
 )
 
 @Immutable
@@ -35,6 +37,7 @@ data class ActiveDownload(
     val status: String,
     val thumbnailUrl: String? = null,
     val type: String = "video",
+    val playlistProgress: String? = null // e.g., "3/10"
 )
 
 data class DownloadedVideo(
@@ -44,4 +47,6 @@ data class DownloadedVideo(
     val thumbnailUrl: String? = null,
     val isLocked: Boolean = false,
     val type: String = "video",
+    val playlistId: String? = null,
+    val isPlaylistGroup: Boolean = false
 )
