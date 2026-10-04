@@ -39,6 +39,7 @@ import coil.ImageLoader
 import coil.compose.AsyncImage
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import coil.request.ImageRequest
 import coil.request.videoFrameMillis
 import com.arslandaim.omegavideodownloader.R
 import com.arslandaim.omegavideodownloader.*
@@ -264,63 +265,53 @@ fun DownloadItem(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            with(sharedTransitionScope) {
-                Surface(
-                    modifier = Modifier
-                        .size(80.dp, 60.dp)
-                        .sharedElement(
-                            rememberSharedContentState(key = "video_container_${video.localPath}"),
-                            animatedVisibilityScope = animatedVisibilityScope,
-                            boundsTransform = { _, _ ->
-                                spring(
-                                    stiffness = Spring.StiffnessLow,
-                                    dampingRatio = Spring.DampingRatioLowBouncy
-                                )
-                            }
+            Surface(
+                modifier = Modifier
+                    .size(80.dp, 60.dp)
+                    .clip(RoundedCornerShape(14.dp)),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+            ) {
+                if (video.isLocked && !isInsideLocker) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(Icons.Default.Lock, "Locked", tint = Color.White.copy(alpha = 0.5f))
+                    }
+                } else if (video.isPlaylistGroup) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            Icons.Default.Folder, 
+                            "Playlist", 
+                            tint = Color(0xFF1877F2).copy(alpha = 0.5f), 
+                            modifier = Modifier.size(32.dp)
                         )
-                        .clip(RoundedCornerShape(14.dp)),
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
-                ) {
-                    if (video.isLocked && !isInsideLocker) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(Icons.Default.Lock, "Locked", tint = Color.White.copy(alpha = 0.5f))
-                        }
-                    } else if (video.isPlaylistGroup) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                Icons.Default.Folder, 
-                                "Playlist", 
-                                tint = Color(0xFF1877F2).copy(alpha = 0.5f), 
-                                modifier = Modifier.size(32.dp)
-                            )
-                        }
-                    } else if (video.type == "audio") {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                Icons.Default.MusicNote, 
-                                "Audio", 
-                                tint = Color(0xFFFF5722).copy(alpha = 0.5f), 
-                                modifier = Modifier.size(32.dp)
-                            )
-                            if (isCurrentlyPlaying) {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .background(Color.Black.copy(alpha = 0.3f)),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    NowPlayingIndicator()
-                                }
+                    }
+                } else if (video.type == "audio") {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            Icons.Default.MusicNote, 
+                            "Audio", 
+                            tint = Color(0xFFFF5722).copy(alpha = 0.5f), 
+                            modifier = Modifier.size(32.dp)
+                        )
+                        if (isCurrentlyPlaying) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Color.Black.copy(alpha = 0.3f)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                NowPlayingIndicator()
                             }
                         }
-                    } else {
-                        val imageRequest = remember(video.localPath) {
-                            coil.request.ImageRequest.Builder(context)
-                                .data(video.localPath)
-                                .videoFrameMillis(1000)
-                                .build()
-                        }
-                        
+                    }
+                } else {
+                    val imageRequest = remember(video.localPath) {
+                        ImageRequest.Builder(context)
+                            .data(video.localPath)
+                            .videoFrameMillis(1000)
+                            .build()
+                    }
+                    
+                    with(sharedTransitionScope) {
                         AsyncImage(
                             model = imageRequest,
                             imageLoader = imageLoader,
@@ -333,16 +324,16 @@ fun DownloadItem(
                                 ),
                             contentScale = ContentScale.Crop
                         )
+                    }
 
-                        if (isCurrentlyPlaying) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(Color.Black.copy(alpha = 0.3f)),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                NowPlayingIndicator()
-                            }
+                    if (isCurrentlyPlaying) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.Black.copy(alpha = 0.3f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            NowPlayingIndicator()
                         }
                     }
                 }

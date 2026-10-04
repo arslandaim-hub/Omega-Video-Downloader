@@ -170,9 +170,16 @@ fun MainScreen(
                             haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                             navController.navigate("settings") 
                         },
-                        modifier = Modifier.size(40.dp).background(color = Color(0xFF006699), shape = RoundedCornerShape(12.dp))
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f), RoundedCornerShape(12.dp))
                     ) {
-                        Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings", tint = Color.White, modifier = Modifier.size(24.dp))
+                        Icon(
+                            imageVector = Icons.Default.Settings, 
+                            contentDescription = "Settings", 
+                            tint = Color(0xFF1877F2), 
+                            modifier = Modifier.size(24.dp)
+                        )
                     }
                 }
             }
@@ -199,6 +206,7 @@ fun MainScreen(
                     navIcons.forEachIndexed { index, iconData ->
                         val (icon, label) = iconData
                         val isSelected = selectedPageIndex == index
+                        val activeColor = if (index == 2) Color(0xFFFF5722) else Color(0xFF1877F2)
                         val iconScale by animateFloatAsState(targetValue = if (isSelected) 1.25f else 1f, animationSpec = spring(stiffness = Spring.StiffnessLow, dampingRatio = Spring.DampingRatioMediumBouncy))
                         
                         NavigationBarItem(
@@ -210,9 +218,9 @@ fun MainScreen(
                             icon = { Icon(imageVector = icon, contentDescription = label, modifier = Modifier.size(29.dp).graphicsLayer { scaleX = iconScale; scaleY = iconScale }) },
                             label = { Text(text = label, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium, modifier = Modifier.graphicsLayer { alpha = if (isSelected) 1f else 0.8f }) },
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = if (index == 2) Color(0xFFFF5722) else Color(0xFF1877F2),
+                                selectedIconColor = activeColor,
                                 unselectedIconColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-                                selectedTextColor = MaterialTheme.colorScheme.onSurface,
+                                selectedTextColor = activeColor,
                                 unselectedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
                                 indicatorColor = Color.Transparent
                             )

@@ -91,10 +91,6 @@ fun VideoPlayer(videoUrl: String, settingsManager: SettingsManager? = null, onBa
 
     // MediaController Initialization
     LaunchedEffect(videoUrl) {
-        // Strategic delay to ensure navigation expansion animation is in full swing
-        // Reduced to 100ms for faster, snappier playback start
-        delay(100)
-
         val sessionToken = SessionToken(context, ComponentName(context, PlaybackService::class.java))
         val future = MediaController.Builder(context, sessionToken).buildAsync()
         
@@ -267,6 +263,7 @@ fun VideoPlayer(videoUrl: String, settingsManager: SettingsManager? = null, onBa
             factory = { ctx ->
                 PlayerView(ctx).apply {
                     useController = false
+                    resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
                     layoutParams = FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT

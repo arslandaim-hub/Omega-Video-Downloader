@@ -6,8 +6,6 @@
 package com.arslandaim.omegavideodownloader.ui.screens
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,23 +24,11 @@ fun VideoPlayerScreen(
     animatedVisibilityScope: AnimatedVisibilityScope,
     onBack: () -> Unit
 ) {
-    with(sharedTransitionScope) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black)
-                .sharedElement(
-                    rememberSharedContentState(key = "video_container_$videoUrl"),
-                    animatedVisibilityScope = animatedVisibilityScope,
-                    boundsTransform = { _, _ ->
-                        spring(
-                            stiffness = Spring.StiffnessVeryLow,
-                            dampingRatio = Spring.DampingRatioLowBouncy
-                        )
-                    }
-                )
-        ) {
-            VideoPlayer(videoUrl = videoUrl, settingsManager = settingsManager, onBack = onBack)
-        }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
+        VideoPlayer(videoUrl = videoUrl, settingsManager = settingsManager, onBack = onBack)
     }
 }

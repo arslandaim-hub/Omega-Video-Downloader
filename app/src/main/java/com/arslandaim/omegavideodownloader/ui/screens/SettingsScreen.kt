@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.border
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -35,6 +37,8 @@ import androidx.compose.ui.unit.sp
 import androidx.core.os.LocaleListCompat
 import com.arslandaim.omegavideodownloader.*
 import com.arslandaim.omegavideodownloader.ui.components.*
+import com.arslandaim.omegavideodownloader.ui.theme.glassBackground
+import com.arslandaim.omegavideodownloader.ui.theme.glassBorder
 import kotlinx.coroutines.launch
 
 @Composable
@@ -72,12 +76,14 @@ fun SettingsScreen(settingsManager: SettingsManager, onBack: () -> Unit) {
         refreshSizes()
     }
 
+    val isDark = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = if (androidx.compose.foundation.isSystemInDarkTheme()) {
+                    colors = if (isDark) {
                         listOf(Color(0xFF161823), Color.Black)
                     } else {
                         listOf(Color(0xFFF0F2F5), Color(0xFFE3E6EA))
@@ -86,35 +92,54 @@ fun SettingsScreen(settingsManager: SettingsManager, onBack: () -> Unit) {
             )
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
+            modifier = Modifier.fillMaxSize()
         ) {
             // Header
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 20.dp)
+            Surface(
+                color = MaterialTheme.colorScheme.glassBackground,
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .fillMaxWidth()
+                    .border(
+                        0.5.dp, 
+                        MaterialTheme.colorScheme.glassBorder, 
+                        RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)
+                    ),
+                shape = RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)
             ) {
-                IconButton(
-                    onClick = onBack,
+                Row(
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f), CircleShape)
-                        .size(40.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.onSurface)
+                    IconButton(
+                        onClick = onBack,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f), RoundedCornerShape(12.dp))
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack, 
+                            contentDescription = "Back", 
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text(
+                        text = "Settings",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Black,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        letterSpacing = (-0.5).sp
+                    )
                 }
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    "Settings",
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
             }
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 8.dp),
+                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 // Personalization Section
@@ -144,12 +169,12 @@ fun SettingsScreen(settingsManager: SettingsManager, onBack: () -> Unit) {
                                     modifier = Modifier
                                         .size(40.dp)
                                         .clip(CircleShape)
-                                        .background(Color.Black.copy(alpha = 0.2f))
+                                        .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.ChevronRight,
                                         contentDescription = null,
-                                        tint = Color(0xFF0377F5),
+                                        tint = Color(0xFF1877F2),
                                         modifier = Modifier.size(30.dp)
                                     )
                                 }
@@ -205,7 +230,7 @@ fun SettingsScreen(settingsManager: SettingsManager, onBack: () -> Unit) {
                                 if (isUpdating) {
                                     CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
                                 } else {
-                                    Icon(Icons.Default.Refresh, contentDescription = "Update", tint = Color(0xFF0377F5))
+                                    Icon(Icons.Default.Refresh, contentDescription = "Update", tint = Color(0xFF1877F2))
                                 }
                             }
                         }
@@ -248,12 +273,12 @@ fun SettingsScreen(settingsManager: SettingsManager, onBack: () -> Unit) {
                                     modifier = Modifier
                                         .size(40.dp)
                                         .clip(CircleShape)
-                                        .background(Color.Black.copy(alpha = 0.2f))
+                                        .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.ChevronRight,
                                         contentDescription = null,
-                                        tint = Color(0xFF0377F5),
+                                        tint = Color(0xFF1877F2),
                                         modifier = Modifier.size(30.dp)
                                     )
                                 }
@@ -341,7 +366,7 @@ fun SettingsScreen(settingsManager: SettingsManager, onBack: () -> Unit) {
                                 },
                                 enabled = isFingerprintAvailable,
                                 colors = SwitchDefaults.colors(
-                                    checkedThumbColor = Color(0xFF0377F5),
+                                    checkedThumbColor = Color(0xFF1877F2),
                                     checkedTrackColor = Color.LightGray,
                                     uncheckedTrackColor = Color.LightGray,
                                     disabledUncheckedTrackColor = Color.LightGray.copy(alpha = 0.5f),
@@ -407,12 +432,12 @@ fun SettingsScreen(settingsManager: SettingsManager, onBack: () -> Unit) {
                                     modifier = Modifier
                                         .size(40.dp)
                                         .clip(RoundedCornerShape(8.dp))
-                                        .background(Color.Black.copy(alpha = 0.2f))
+                                        .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
                                 ) {
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Filled.Send,
                                         contentDescription = null,
-                                        tint = Color(0xFF0377F5),
+                                        tint = Color(0xFF1877F2),
                                         modifier = Modifier.size(24.dp)
                                     )
                                 }
@@ -439,12 +464,12 @@ fun SettingsScreen(settingsManager: SettingsManager, onBack: () -> Unit) {
                                     modifier = Modifier
                                         .size(40.dp)
                                         .clip(RoundedCornerShape(8.dp))
-                                        .background(Color.Black.copy(alpha = 0.2f))
+                                        .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.Support,
                                         contentDescription = null,
-                                        tint = Color(0xFF0377F5),
+                                        tint = Color(0xFF1877F2),
                                         modifier = Modifier.size(24.dp)
                                     )
                                 }

@@ -12,7 +12,6 @@ import com.arslandaim.omegavideodownloader.SettingsManager
 import com.arslandaim.omegavideodownloader.data.DownloadRepository
 import com.arslandaim.omegavideodownloader.data.VideoRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -40,7 +39,6 @@ class MainViewModel(
 
     init {
         autoUpdateYtDlp()
-        startDownloadMonitoring()
     }
 
     private fun autoUpdateYtDlp() {
@@ -48,16 +46,6 @@ class MainViewModel(
             val autoUpdate = settingsManager.autoUpdateYtDlp.first()
             if (autoUpdate) {
                 videoRepository.updateYtDlpBinary()
-            }
-        }
-    }
-
-    private fun startDownloadMonitoring() {
-        viewModelScope.launch(Dispatchers.IO) {
-            while (true) {
-                val activeList = downloadRepository.queryActiveDownloads()
-                settingsManager.updateActiveDownloads(activeList)
-                delay(1.seconds)
             }
         }
     }

@@ -17,6 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
+import androidx.compose.ui.graphics.luminance
+
 private val DarkColorScheme = darkColorScheme(
     primary = Color(0xFF1877F2), // Facebook Blue
     secondary = Color(0xFF161823),
@@ -45,11 +47,11 @@ private val LightColorScheme = lightColorScheme(
 
 val ColorScheme.glassBackground: Color
     @Composable
-    get() = if (isSystemInDarkTheme()) Color.Black.copy(alpha = 0.5f) else Color.White.copy(alpha = 0.5f)
+    get() = if (surface.luminance() < 0.5f) Color.Black.copy(alpha = 0.5f) else Color.White.copy(alpha = 0.5f)
 
 val ColorScheme.glassBorder: Color
     @Composable
-    get() = if (isSystemInDarkTheme()) Color.White.copy(alpha = 0.1f) else Color.Black.copy(alpha = 0.1f)
+    get() = if (surface.luminance() < 0.5f) Color.White.copy(alpha = 0.1f) else Color.Black.copy(alpha = 0.1f)
 
 @Composable
 fun OmegaVideoDownloaderTheme(

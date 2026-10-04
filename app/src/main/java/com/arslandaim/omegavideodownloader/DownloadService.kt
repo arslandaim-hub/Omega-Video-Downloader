@@ -61,6 +61,19 @@ class DownloadService : Service() {
         val taskId = System.currentTimeMillis()
         activeTasks[taskId] = title
         
+        val settingsManager = SettingsManager(applicationContext)
+        serviceScope.launch {
+            settingsManager.updateLocalDownload(
+                id = taskId,
+                title = title,
+                progress = 0f,
+                totalBytes = 0,
+                downloadedBytes = 0,
+                type = type,
+                playlistProgress = if (isPlaylist) "1/?" else null
+            )
+        }
+        
         if (activeTasks.size == 1) {
             startForeground(notificationId, createNotification(title, 0))
             lastForegroundId = notificationId
