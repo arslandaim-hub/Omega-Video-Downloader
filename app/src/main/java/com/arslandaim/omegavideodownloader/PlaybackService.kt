@@ -5,6 +5,7 @@
 */
 package com.arslandaim.omegavideodownloader
 
+import android.R
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +13,7 @@ import android.util.Log
 import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.CommandButton
@@ -86,8 +88,15 @@ class PlaybackService : MediaSessionService() {
                 val sessionCommands = MediaSession.ConnectionResult.DEFAULT_SESSION_COMMANDS.buildUpon()
                     .add(COMMAND_CLOSE)
                     .build()
+                val playerCommands = MediaSession.ConnectionResult.DEFAULT_PLAYER_COMMANDS.buildUpon()
+                    .add(Player.COMMAND_SET_REPEAT_MODE)
+                    .add(Player.COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM)
+                    .add(Player.COMMAND_SEEK_TO_NEXT)
+                    .add(Player.COMMAND_SEEK_TO_PREVIOUS)
+                    .build()
                 return MediaSession.ConnectionResult.AcceptedResultBuilder(session)
                     .setAvailableSessionCommands(sessionCommands)
+                    .setAvailablePlayerCommands(playerCommands)
                     .build()
             }
 
@@ -117,7 +126,27 @@ class PlaybackService : MediaSessionService() {
             .setSessionCommand(COMMAND_CLOSE)
             .build()
 
-        mediaSession?.setMediaButtonPreferences(ImmutableList.of(closeButton))
+        val prevButton = CommandButton.Builder()
+            .setDisplayName("Previous")
+            .setIconResId(R.drawable.ic_media_previous)
+            .setPlayerCommand(Player.COMMAND_SEEK_TO_PREVIOUS)
+            .build()
+
+        val nextButton = CommandButton.Builder()
+            .setDisplayName("Next")
+            .setIconResId(R.drawable.ic_media_next)
+            .setPlayerCommand(Player.COMMAND_SEEK_TO_NEXT)
+            .build()
+
+        val repeatButton = CommandButton.Builder()
+            .setDisplayName("Repeat")
+            .setIconResId(R.drawable.ic_menu_revert)
+            .setPlayerCommand(Player.COMMAND_SET_REPEAT_MODE)
+            .build()
+
+        mediaSession?.setMediaButtonPreferences(
+            ImmutableList.of(repeatButton, prevButton, nextButton, closeButton)
+        )
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? {

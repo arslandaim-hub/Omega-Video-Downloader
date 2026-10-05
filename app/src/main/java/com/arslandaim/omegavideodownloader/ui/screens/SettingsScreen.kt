@@ -52,6 +52,15 @@ fun SettingsScreen(settingsManager: SettingsManager, onBack: () -> Unit) {
     var cacheSize by remember { mutableStateOf("0.0 MB") }
     var totalAppSize by remember { mutableStateOf("0.0 MB") }
 
+    val appVersionName = remember {
+        try {
+            val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            pInfo.versionName ?: "1.7.5"
+        } catch (_: Exception) {
+            "1.7.5"
+        }
+    }
+
     val cookiePickerLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -524,7 +533,7 @@ fun SettingsScreen(settingsManager: SettingsManager, onBack: () -> Unit) {
                                 Column {
                                     Spacer(modifier = Modifier.height(12.dp))
                                     Text(
-                                        text = "Arsalan Daim Shar, an AI enthusiast and ML engineer building side projects such as this as a hobby and love for open-source applications",
+                                        text = "Developed by Arsalan Daim Shar",
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                                         lineHeight = 20.sp
@@ -566,7 +575,7 @@ fun SettingsScreen(settingsManager: SettingsManager, onBack: () -> Unit) {
                                             )
                                             Spacer(modifier = Modifier.width(8.dp))
                                             Text(
-                                                "1.7.1 (Beta)",
+                                                "$appVersionName (Beta)",
                                                 style = MaterialTheme.typography.labelLarge,
                                                 fontWeight = FontWeight.Bold,
                                                 color = Color(0xFF1877F2)

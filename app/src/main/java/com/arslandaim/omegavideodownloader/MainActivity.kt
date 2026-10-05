@@ -249,8 +249,10 @@ class MainActivity : AppCompatActivity() {
                             }
                             composable(
                                 "player/{videoUrl}",
-                                enterTransition = { scaleIn(tween(500, easing = FastOutSlowInEasing), initialScale = 0.8f) + fadeIn(tween(400)) },
-                                exitTransition = { scaleOut(tween(500, easing = FastOutSlowInEasing), targetScale = 0.8f) + fadeOut(tween(400)) }
+                                enterTransition = { fadeIn(tween(200)) },
+                                exitTransition = { ExitTransition.None },
+                                popEnterTransition = { EnterTransition.None },
+                                popExitTransition = { ExitTransition.None }
                             ) { backStackEntry ->
                                 val videoUrl = backStackEntry.arguments?.getString("videoUrl") ?: ""
                                 VideoPlayerScreen(
