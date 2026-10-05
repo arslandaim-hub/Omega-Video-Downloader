@@ -416,6 +416,26 @@ fun MainScreen(
                             mediaController?.seekTo(pos)
                             audioPosition = pos
                         },
+                        onSkipPrevious = {
+                            mediaController?.let { c ->
+                                if (c.hasPreviousMediaItem()) {
+                                    c.seekToPreviousMediaItem()
+                                } else {
+                                    c.seekTo(0L)
+                                }
+                                audioPosition = c.currentPosition
+                            }
+                        },
+                        onSkipNext = {
+                            mediaController?.let { c ->
+                                if (c.hasNextMediaItem()) {
+                                    c.seekToNextMediaItem()
+                                } else {
+                                    c.seekTo(audioDuration)
+                                }
+                                audioPosition = c.currentPosition
+                            }
+                        },
                         onSkipBackward = {
                             mediaController?.let { c ->
                                 val newPos = (c.currentPosition - 10000L).coerceAtLeast(0L)

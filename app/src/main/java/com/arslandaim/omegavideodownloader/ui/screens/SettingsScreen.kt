@@ -415,7 +415,7 @@ fun SettingsScreen(settingsManager: SettingsManager, onBack: () -> Unit) {
                         SettingsItem(
                             icon = Icons.Default.BugReport,
                             title = "Report a bug",
-                            subtitle = "Please share logs through Gmail"
+                            subtitle = "Please share logs through Email"
                         ) {
                             IconButton(onClick = {
                                 scope.launch {

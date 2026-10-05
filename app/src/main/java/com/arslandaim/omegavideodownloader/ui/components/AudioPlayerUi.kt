@@ -5,6 +5,7 @@
 */
 package com.arslandaim.omegavideodownloader.ui.components
 
+import android.app.Activity
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -25,10 +26,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import androidx.media3.common.Player
 import com.arslandaim.omegavideodownloader.DownloadedVideo
 import com.arslandaim.omegavideodownloader.formatTime
@@ -149,12 +152,31 @@ fun ExpandedAudioPlayerSheet(
     repeatMode: Int = Player.REPEAT_MODE_OFF,
     onPlayPauseToggle: () -> Unit,
     onSeekTo: (Long) -> Unit,
+    onSkipPrevious: () -> Unit,
+    onSkipNext: () -> Unit,
     onSkipBackward: () -> Unit,
     onSkipForward: () -> Unit,
     onToggleRepeat: () -> Unit,
     onDismiss: () -> Unit
 ) {
     val haptic = LocalHapticFeedback.current
+    val view = LocalView.current
+
+    // Force System Bar Icons to WHITE on dark audio sheet background
+    DisposableEffect(view) {
+        val window = (view.context as? Activity)?.window
+        val controller = window?.let { WindowCompat.getInsetsController(it, view) }
+        val previousLightStatus = controller?.isAppearanceLightStatusBars ?: false
+        val previousLightNav = controller?.isAppearanceLightNavigationBars ?: false
+
+        controller?.isAppearanceLightStatusBars = false
+        controller?.isAppearanceLightNavigationBars = false
+
+        onDispose {
+            controller?.isAppearanceLightStatusBars = previousLightStatus
+            controller?.isAppearanceLightNavigationBars = previousLightNav
+        }
+    }
 
     // Rotation Animation for Vinyl Disc
     val infiniteTransition = rememberInfiniteTransition(label = "vinyl_rotation")
@@ -217,26 +239,7 @@ fun ExpandedAudioPlayerSheet(
                     letterSpacing = 2.sp
                 )
 
-                IconButton(
-                    onClick = {
-                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        onToggleRepeat()
-                    },
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(
-                            if (repeatMode != Player.REPEAT_MODE_OFF) Color(0xFFFF5722).copy(alpha = 0.2f)
-                            else Color.White.copy(alpha = 0.1f),
-                            CircleShape
-                        )
-                ) {
-                    Icon(
-                        imageVector = if (repeatMode == Player.REPEAT_MODE_ONE) Icons.Default.RepeatOne else Icons.Default.Repeat,
-                        contentDescription = "Repeat Mode",
-                        tint = if (repeatMode != Player.REPEAT_MODE_OFF) Color(0xFFFF5722) else Color.White,
-                        modifier = Modifier.size(22.dp)
-                    )
-                }
+                Box(modifier = Modifier.size(40.dp))
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -355,29 +358,53 @@ fun ExpandedAudioPlayerSheet(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Playback Controls
+            // Playback Controls (5-Button Master Row)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // 1. Repeat Button (Moved to Bottom Controls)
                 IconButton(
                     onClick = {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        onSkipBackward()
+                        onToggleRepeat()
                     },
                     modifier = Modifier
-                        .size(52.dp)
-                        .background(Color.White.copy(alpha = 0.08f), CircleShape)
+                        .size(44.dp)
+                        .background(
+                            if (repeatMode != Player.REPEAT_MODE_OFF) Color(0xFFFF5722).copy(alpha = 0.2f)
+                            else Color.White.copy(alpha = 0.08f),
+                            CircleShape
+                        )
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Replay10,
-                        contentDescription = "Rewind 10s",
-                        tint = Color.White,
-                        modifier = Modifier.size(28.dp)
+                        imageVector = if (repeatMode == Player.REPEAT_MODE_ONE) Icons.Default.RepeatOne else Icons.Default.Repeat,
+                        contentDescription = "Repeat Mode",
+                        tint = if (repeatMode != Player.REPEAT_MODE_OFF) Color(0xFFFF5722) else Color.White.copy(alpha = 0.6f),
+                        modifier = Modifier.size(22.dp)
                     )
                 }
 
+                // 2. Previous Track Button
+                IconButton(
+                    onClick = {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        onSkipPrevious()
+                    },
+                    modifier = Modifier
+                        .size(48.dp)
+                        .background(Color.White.copy(alpha = 0.08f), CircleShape)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.SkipPrevious,
+                        contentDescription = "Previous Track",
+                        tint = Color.White,
+                        modifier = Modifier.size(26.dp)
+                    )
+                }
+
+                // 3. Play / Pause Button (Large Center)
                 IconButton(
                     onClick = {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -395,20 +422,39 @@ fun ExpandedAudioPlayerSheet(
                     )
                 }
 
+                // 4. Next Track Button
+                IconButton(
+                    onClick = {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        onSkipNext()
+                    },
+                    modifier = Modifier
+                        .size(48.dp)
+                        .background(Color.White.copy(alpha = 0.08f), CircleShape)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.SkipNext,
+                        contentDescription = "Next Track",
+                        tint = Color.White,
+                        modifier = Modifier.size(26.dp)
+                    )
+                }
+
+                // 5. Forward 10s Button
                 IconButton(
                     onClick = {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                         onSkipForward()
                     },
                     modifier = Modifier
-                        .size(52.dp)
+                        .size(44.dp)
                         .background(Color.White.copy(alpha = 0.08f), CircleShape)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Forward10,
                         contentDescription = "Forward 10s",
                         tint = Color.White,
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier.size(22.dp)
                     )
                 }
             }
