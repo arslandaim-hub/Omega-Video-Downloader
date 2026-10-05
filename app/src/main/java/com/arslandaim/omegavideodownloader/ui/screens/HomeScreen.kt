@@ -170,7 +170,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(32.dp))
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            val platforms = listOf("YouTube", "Facebook", "Twitter", "Spotify")
+            val platforms = listOf("YouTube", "Facebook", "Twitter", "Insta")
             platforms.forEach { name ->
                 Box(modifier = Modifier.weight(1f)) {
                     PlatformBadge(name)
