@@ -85,12 +85,14 @@ fun MainScreen(
 
     val isLockerSet by lockerViewModel.isLockerSet.collectAsState()
     val downloadedVideos by downloadsViewModel.downloadedVideos.collectAsState()
+    val lockerVideos by lockerViewModel.lockerVideos.collectAsState()
 
     var showPinSetup by remember { mutableStateOf(false) }
     var pendingVideoToLock by remember { mutableStateOf<DownloadedVideo?>(null) }
 
     // Audio Player State
     var activeAudioTrack by remember { mutableStateOf<DownloadedVideo?>(null) }
+    var audioPlaylist by remember { mutableStateOf<List<DownloadedVideo>>(emptyList()) }
     var isAudioPlaying by remember { mutableStateOf(false) }
     var audioPosition by remember { mutableLongStateOf(0L) }
     var audioDuration by remember { mutableLongStateOf(0L) }
@@ -120,6 +122,14 @@ fun MainScreen(
                     override fun onRepeatModeChanged(repeatMode: Int) {
                         audioRepeatMode = repeatMode
                     }
+                    override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+                        val currentIndex = controller.currentMediaItemIndex
+                        if (audioPlaylist.isNotEmpty() && currentIndex in audioPlaylist.indices) {
+                            val track = audioPlaylist[currentIndex]
+                            activeAudioTrack = track
+                            mainViewModel.setCurrentlyPlaying(track.localPath)
+                        }
+                    }
                 })
             } catch (_: Exception) {}
         }, MoreExecutors.directExecutor())
@@ -138,13 +148,25 @@ fun MainScreen(
     val onMediaClick: (DownloadedVideo) -> Unit = { video ->
         if (video.type == "audio") {
             activeAudioTrack = video
+
+            val sourceList = if (video.isLocked) {
+                lockerVideos.filter { it.type == "audio" && !it.isPlaylistGroup }
+            } else {
+                downloadedVideos.filter { it.type == "audio" && !it.isPlaylistGroup }
+            }
+
+            audioPlaylist = if (sourceList.none { it.localPath == video.localPath }) {
+                listOf(video)
+            } else {
+                sourceList
+            }
+
             mediaController?.let { controller ->
-                val currentUri = controller.currentMediaItem?.localConfiguration?.uri?.toString()
-                if (currentUri != video.localPath) {
-                    val mediaItem = MediaItem.fromUri(video.localPath)
-                    controller.setMediaItem(mediaItem)
-                    controller.prepare()
-                }
+                val mediaItems = audioPlaylist.map { MediaItem.fromUri(it.localPath) }
+                val clickedIndex = audioPlaylist.indexOfFirst { it.localPath == video.localPath }.coerceAtLeast(0)
+
+                controller.setMediaItems(mediaItems, clickedIndex, 0L)
+                controller.prepare()
                 controller.playWhenReady = true
                 controller.play()
                 isAudioPlaying = true
@@ -418,10 +440,12 @@ fun MainScreen(
                         },
                         onSkipPrevious = {
                             mediaController?.let { c ->
-                                if (c.hasPreviousMediaItem()) {
-                                    c.seekToPreviousMediaItem()
-                                } else {
+                                if (c.currentPosition > 3000L) {
                                     c.seekTo(0L)
+                                } else if (c.hasPreviousMediaItem()) {
+                                    c.seekToPreviousMediaItem()
+                                } else if (audioPlaylist.isNotEmpty()) {
+                                    c.seekTo(audioPlaylist.lastIndex, 0L)
                                 }
                                 audioPosition = c.currentPosition
                             }
@@ -430,8 +454,8 @@ fun MainScreen(
                             mediaController?.let { c ->
                                 if (c.hasNextMediaItem()) {
                                     c.seekToNextMediaItem()
-                                } else {
-                                    c.seekTo(audioDuration)
+                                } else if (audioPlaylist.isNotEmpty()) {
+                                    c.seekTo(0, 0L)
                                 }
                                 audioPosition = c.currentPosition
                             }
