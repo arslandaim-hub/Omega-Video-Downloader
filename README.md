@@ -12,8 +12,8 @@
     </td>
   </tr>
 </table><p align="center">
-A fast, privacy-focused social media video and audio downloader for <strong>YouTube</strong>, <strong>Facebook</strong>, and <strong>Instagram</strong>.<br>
-Built with a modern Material Design interface, completely ad-free, with no tracking or data collection.
+A fast, privacy-focused social media video and audio downloader for <strong>YouTube</strong>, <strong>Facebook</strong>, <strong>Instagram</strong>.<br>
+Material 3 Design, completely ad-free, with no tracking or data collection.
 </p>
 
 
