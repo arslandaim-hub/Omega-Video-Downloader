@@ -1,15 +1,11 @@
 <div align="center">
 
-<table align="center" style="border: none;">
   <tr>
-    <td align="center" style="border: none; padding-right: 15px;">
-      <img src="fastlane/metadata/android/en-US/images/icon.png" alt="Omega Video Downloader Icon" width="80">
-    </td>
-    <td align="left" style="border: none;">
+    <!-- <td align="center" style="border: none; padding-right: 15px;">
+      <img src="fastlane/metadata/android/en-US/images/icon.png" alt="Omega Video Downloader Icon" width="80"> -->
+    <!-- </td> -->
+    <!-- <td align="left" style="border: none;"> -->
       <h1 style="margin: 0; font-size: 2.2rem;">Omega Video Downloader</h1>
-    </td>
-  </tr>
-</table>
 
 <p>
 A fast, privacy-focused social media video and audio downloader for <strong>YouTube</strong>, <strong>Facebook</strong>, <strong>Instagram</strong> and <strong>Twitter</strong>.<br>
