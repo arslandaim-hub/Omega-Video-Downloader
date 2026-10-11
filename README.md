@@ -76,7 +76,7 @@ Omega Video Downloader uses **Site-Specific Extractors** which is a much smarter
 
 > **Note:** The app utilizes 3 heavy-duty tools: **yt-dlp**, **FFmpeg**, and **Aria2c**. All of these increase the APK file size to over 100MB, but it's completely worth it for unmatched reliability!
 
-** Important Setup Note:** 
+**Important Setup Note:** 
 You can add `cookies.txt` file from any browser using a Chrome Cookies Extractor Extension and import it in the app's settings. Importing cookies makes the app effectively bypass bot detection, preventing video extraction blocks and significantly improving download reliability. Without imported cookies, some links may fail.
 
 ---
