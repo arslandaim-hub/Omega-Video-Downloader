@@ -76,7 +76,7 @@ Omega Video Downloader uses **Site-Specific Extractors** which is a much smarter
 You can add `cookies.txt` file from any browser using a Chrome Cookies Extractor Extension and import it in the app's settings. Importing cookies makes the app effectively bypass bot detection, preventing video extraction blocks and significantly improving download reliability. Without imported cookies, some links may fail.
 
 ---
-
+<!--
 ### Screenshots
 
 <p align="center">
@@ -88,3 +88,4 @@ You can add `cookies.txt` file from any browser using a Chrome Cookies Extractor
   &nbsp;
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/file_downloads.png" width="18%" alt="Downloads Screen">
 </p>
+-->
