@@ -68,7 +68,7 @@ There are over 1,000 specific scripts inside the app, each dedicated to a differ
 - **JS Reverse Engineering:**
 Many sites hide their video links behind complex JavaScript code. O-V-D's logic is capable of reading and reverse-engineering that code to find the secret link that simple regex downloaders will never see.
 
-O-V-D uses 3 heavy tools yt-dlp, FFmpeg and Aria2c. All of these increase the size of apk file to over 200MBs. But, it's worth it!
+O-V-D uses 3 heavy tools yt-dlp, FFmpeg and Aria2c. All of these increase the size of apk file to over 100MBs. But, it's worth it!
 
 **Note**: Must download cookies.txt file of any brower using Chrome Cookies Extractor Extension and import it in app's settings.
 Core Components
