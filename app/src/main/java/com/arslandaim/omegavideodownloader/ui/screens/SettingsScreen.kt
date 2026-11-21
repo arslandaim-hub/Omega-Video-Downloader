@@ -13,7 +13,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -120,43 +119,34 @@ fun SettingsScreen(settingsManager: SettingsManager, onBack: () -> Unit) {
             // Header
             Surface(
                 color = omegaColors.surface,
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .fillMaxWidth()
-                    .border(
-                        0.5.dp,
-                        omegaColors.border,
-                        RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)
-                    ),
-                shape = RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp, vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(
-                        onClick = onBack,
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Row(
                         modifier = Modifier
-                            .size(40.dp)
-                            .background(omegaColors.cardElevated, RoundedCornerShape(12.dp))
+                            .statusBarsPadding()
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = omegaColors.textPrimary,
-                            modifier = Modifier.size(24.dp)
+                        IconButton(onClick = onBack) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back",
+                                tint = omegaColors.textPrimary,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Settings",
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Black,
+                            color = omegaColors.textPrimary,
+                            letterSpacing = (-0.5).sp
                         )
                     }
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Text(
-                        text = "Settings",
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Black,
-                        color = omegaColors.textPrimary,
-                        letterSpacing = (-0.5).sp
-                    )
+                    HorizontalDivider(thickness = 0.5.dp, color = omegaColors.border)
                 }
             }
 

@@ -11,9 +11,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -336,76 +334,65 @@ fun MainScreen(
 
                     Surface(
                         color = omegaColors.surface,
-                        shadowElevation = if (omegaColors.isDark) 0.dp else 4.dp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .border(
-                                0.5.dp,
-                                omegaColors.border,
-                                RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)
-                            ),
-                        shape = RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .statusBarsPadding()
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp, vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                OmegaLogo(modifier = Modifier.size(38.dp), color = omegaColors.primary)
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Text(
-                                    text = topTitle,
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    fontWeight = FontWeight.Black,
-                                    color = omegaColors.textPrimary,
-                                    letterSpacing = (-0.5).sp
-                                )
-                            }
-
+                        Column(modifier = Modifier.fillMaxWidth()) {
                             Row(
+                                modifier = Modifier
+                                    .statusBarsPadding()
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 10.dp),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                // Private Vault button
-                                IconButton(
-                                    onClick = {
-                                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                        navController.navigate("vault")
-                                    },
-                                    modifier = Modifier
-                                        .size(40.dp)
-                                        .background(omegaColors.cardElevated, RoundedCornerShape(12.dp))
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Lock,
-                                        contentDescription = "Private Vault",
-                                        tint = omegaColors.secondary,
-                                        modifier = Modifier.size(21.dp)
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    OmegaLogo(modifier = Modifier.size(34.dp), color = omegaColors.primary)
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Text(
+                                        text = topTitle,
+                                        style = MaterialTheme.typography.headlineSmall,
+                                        fontWeight = FontWeight.Black,
+                                        color = omegaColors.textPrimary,
+                                        letterSpacing = (-0.5).sp
                                     )
                                 }
 
-                                // Settings button
-                                IconButton(
-                                    onClick = {
-                                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                        navController.navigate("settings")
-                                    },
-                                    modifier = Modifier
-                                        .size(40.dp)
-                                        .background(omegaColors.cardElevated, RoundedCornerShape(12.dp))
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(2.dp)
                                 ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Settings,
-                                        contentDescription = "Settings",
-                                        tint = omegaColors.primary,
-                                        modifier = Modifier.size(22.dp)
-                                    )
+                                    // Private Vault button
+                                    IconButton(
+                                        onClick = {
+                                            haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                            navController.navigate("vault")
+                                        }
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Lock,
+                                            contentDescription = "Private Vault",
+                                            tint = omegaColors.secondary,
+                                            modifier = Modifier.size(22.dp)
+                                        )
+                                    }
+
+                                    // Settings button
+                                    IconButton(
+                                        onClick = {
+                                            haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                            navController.navigate("settings")
+                                        }
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Settings,
+                                            contentDescription = "Settings",
+                                            tint = omegaColors.primary,
+                                            modifier = Modifier.size(22.dp)
+                                        )
+                                    }
                                 }
                             }
+                            HorizontalDivider(thickness = 0.5.dp, color = omegaColors.border)
                         }
                     }
                 }
@@ -454,21 +441,15 @@ fun MainScreen(
 
                         Surface(
                             color = omegaColors.surface,
-                            shadowElevation = if (omegaColors.isDark) 0.dp else 10.dp,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .border(
-                                    0.5.dp,
-                                    omegaColors.border,
-                                    RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
-                                ),
-                            shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            NavigationBar(
-                                containerColor = Color.Transparent,
-                                contentColor = omegaColors.textPrimary,
-                                tonalElevation = 0.dp
-                            ) {
+                            Column(modifier = Modifier.fillMaxWidth()) {
+                                HorizontalDivider(thickness = 0.5.dp, color = omegaColors.border)
+                                NavigationBar(
+                                    containerColor = Color.Transparent,
+                                    contentColor = omegaColors.textPrimary,
+                                    tonalElevation = 0.dp
+                                ) {
                                 val navItems = listOf(
                                     Icons.Default.Movie to "Movies",
                                     Icons.Default.Download to "Downloader",
@@ -533,6 +514,7 @@ fun MainScreen(
                                         )
                                     )
                                 }
+                            }
                             }
                         }
                     }

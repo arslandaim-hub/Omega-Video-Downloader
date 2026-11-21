@@ -88,15 +88,10 @@ fun LockerScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 10.dp),
+                .padding(horizontal = 12.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(
-                onClick = onCancel,
-                modifier = Modifier
-                    .size(40.dp)
-                    .background(omegaColors.cardElevated, RoundedCornerShape(12.dp))
-            ) {
+            IconButton(onClick = onCancel) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
