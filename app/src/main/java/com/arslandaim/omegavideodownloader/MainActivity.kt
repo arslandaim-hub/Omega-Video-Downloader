@@ -8,7 +8,6 @@ package com.arslandaim.omegavideodownloader
 import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -21,12 +20,15 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
@@ -38,6 +40,9 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
 import coil.decode.VideoFrameDecoder
 import coil.disk.DiskCache
@@ -46,16 +51,14 @@ import coil.request.CachePolicy
 import com.arslandaim.omegavideodownloader.data.DownloadRepository
 import com.arslandaim.omegavideodownloader.data.VideoRepository
 import com.arslandaim.omegavideodownloader.ui.*
+import com.arslandaim.omegavideodownloader.ui.screens.LockerScreen
 import com.arslandaim.omegavideodownloader.ui.screens.MainScreen
 import com.arslandaim.omegavideodownloader.ui.screens.SettingsScreen
 import com.arslandaim.omegavideodownloader.ui.screens.VideoPlayerScreen
+import com.arslandaim.omegavideodownloader.ui.theme.OmegaTheme
 import com.arslandaim.omegavideodownloader.ui.theme.OmegaVideoDownloaderTheme
 import com.google.common.util.concurrent.MoreExecutors
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainActivity : AppCompatActivity() {
 
@@ -63,13 +66,29 @@ class MainActivity : AppCompatActivity() {
     private lateinit var videoRepository: VideoRepository
     private lateinit var downloadRepository: DownloadRepository
 
+    private val incomingSharedText = MutableStateFlow<String?>(null)
+
+    private fun handleShareIntent(intent: Intent?) {
+        if (intent?.action == Intent.ACTION_SEND && intent.type == "text/plain") {
+            val shared = intent.getStringExtra(Intent.EXTRA_TEXT)?.trim()
+            if (!shared.isNullOrBlank()) {
+                incomingSharedText.value = shared
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleShareIntent(intent)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        OmegaCrashHandler.initialize(applicationContext)
-        YtDlpManager.init(applicationContext)
         settingsManager = SettingsManager(this)
         videoRepository = VideoRepository(this)
         downloadRepository = DownloadRepository(this)
+        handleShareIntent(intent)
 
         enableEdgeToEdge()
 
@@ -84,12 +103,19 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val viewModelFactory = remember {
                 object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
                         return when {
-                            modelClass.isAssignableFrom(MainViewModel::class.java) -> MainViewModel(settingsManager, downloadRepository, videoRepository) as T
-                            modelClass.isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(videoRepository, downloadRepository) as T
-                            modelClass.isAssignableFrom(DownloadsViewModel::class.java) -> DownloadsViewModel(settingsManager) as T
-                            modelClass.isAssignableFrom(LockerViewModel::class.java) -> LockerViewModel(settingsManager, LockerManager(this@MainActivity)) as T
+                            modelClass.isAssignableFrom(MainViewModel::class.java) ->
+                                MainViewModel(settingsManager, downloadRepository, videoRepository) as T
+                            modelClass.isAssignableFrom(MoviesViewModel::class.java) ->
+                                MoviesViewModel(videoRepository, downloadRepository, settingsManager) as T
+                            modelClass.isAssignableFrom(HomeViewModel::class.java) ->
+                                HomeViewModel(videoRepository, downloadRepository, settingsManager) as T
+                            modelClass.isAssignableFrom(DownloadsViewModel::class.java) ->
+                                DownloadsViewModel(applicationContext, settingsManager) as T
+                            modelClass.isAssignableFrom(LockerViewModel::class.java) ->
+                                LockerViewModel(settingsManager, LockerManager(this@MainActivity)) as T
                             else -> throw IllegalArgumentException("Unknown ViewModel class")
                         }
                     }
@@ -97,19 +123,22 @@ class MainActivity : AppCompatActivity() {
             }
 
             val mainViewModel: MainViewModel = viewModel(factory = viewModelFactory)
+            val moviesViewModel: MoviesViewModel = viewModel(factory = viewModelFactory)
             val homeViewModel: HomeViewModel = viewModel(factory = viewModelFactory)
             val downloadsViewModel: DownloadsViewModel = viewModel(factory = viewModelFactory)
             val lockerViewModel: LockerViewModel = viewModel(factory = viewModelFactory)
 
             val themeMode by mainViewModel.themeMode.collectAsState()
+            val themeColorPreset by mainViewModel.themeColorPreset.collectAsState()
             val language by mainViewModel.appLanguage.collectAsState()
-            
+            val sharedText by incomingSharedText.collectAsState()
+
             val isDarkTheme = when (themeMode) {
                 "Dark" -> true
                 "Light" -> false
                 else -> androidx.compose.foundation.isSystemInDarkTheme()
             }
-            
+
             LaunchedEffect(isDarkTheme) {
                 enableEdgeToEdge(
                     statusBarStyle = SystemBarStyle.auto(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT) { isDarkTheme },
@@ -118,21 +147,35 @@ class MainActivity : AppCompatActivity() {
             }
 
             LaunchedEffect(language) {
-                val localeTag = if (language == "Arabic") "ar" else "en-US"
-                val appLocales = LocaleListCompat.forLanguageTags(localeTag)
-                AppCompatDelegate.setApplicationLocales(appLocales)
+                val appLocales = LocaleListCompat.forLanguageTags(SettingsManager.localeTagFor(language))
+                if (AppCompatDelegate.getApplicationLocales() != appLocales) {
+                    AppCompatDelegate.setApplicationLocales(appLocales)
+                }
             }
 
-            OmegaVideoDownloaderTheme(themeMode = themeMode) {
+            OmegaVideoDownloaderTheme(
+                themeMode = themeMode,
+                themeColorId = themeColorPreset
+            ) {
                 val navController = rememberNavController()
                 val context = LocalContext.current
+
+                // Process links shared via Android Share sheet -> jump straight to Downloader tab
+                LaunchedEffect(sharedText) {
+                    val text = sharedText ?: return@LaunchedEffect
+                    incomingSharedText.value = null
+                    navController.popBackStack("home", inclusive = false)
+                    moviesViewModel.closeMovieDetail()
+                    mainViewModel.setLastActiveTab(1)
+                    homeViewModel.onIncomingSharedText(text)
+                }
 
                 // Global Playback Monitor
                 DisposableEffect(Unit) {
                     val sessionToken = SessionToken(context, ComponentName(context, PlaybackService::class.java))
                     val controllerFuture = MediaController.Builder(context, sessionToken).buildAsync()
                     var controller: MediaController? = null
-                    
+
                     val listener = object : Player.Listener {
                         override fun onIsPlayingChanged(isPlaying: Boolean) {
                             controller?.let { c ->
@@ -140,6 +183,7 @@ class MainActivity : AppCompatActivity() {
                                 mainViewModel.setCurrentlyPlaying(path)
                             }
                         }
+
                         override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
                             controller?.let { c ->
                                 val path = if (c.isPlaying) mediaItem?.localConfiguration?.uri?.toString() else null
@@ -215,17 +259,15 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 Box(
-                    modifier = Modifier.fillMaxSize().background(
-                        brush = Brush.verticalGradient(
-                            colors = if (isDarkTheme) listOf(Color(0xFF161823), Color.Black) else listOf(Color(0xFFF0F2F5), Color(0xFFE3E6EA))
-                        )
-                    )
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(brush = OmegaTheme.colors.backgroundBrush)
                 ) {
                     SharedTransitionLayout {
                         val navTween = tween<IntOffset>(400, easing = FastOutSlowInEasing)
                         val fadeTween = tween<Float>(300, easing = LinearOutSlowInEasing)
                         val scaleTween = tween<Float>(400, easing = FastOutSlowInEasing)
-                        
+
                         NavHost(
                             navController = navController,
                             startDestination = "home",
@@ -238,11 +280,66 @@ class MainActivity : AppCompatActivity() {
                                 MainScreen(
                                     navController = navController,
                                     mainViewModel = mainViewModel,
+                                    moviesViewModel = moviesViewModel,
                                     homeViewModel = homeViewModel,
                                     downloadsViewModel = downloadsViewModel,
                                     lockerViewModel = lockerViewModel,
                                     settingsManager = settingsManager,
+                                    videoRepository = videoRepository,
+                                    downloadRepository = downloadRepository,
                                     imageLoader = imageLoader,
+                                    sharedTransitionScope = this@SharedTransitionLayout
+                                )
+                            }
+                            composable(
+                                "vault",
+                                enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = navTween) + fadeIn(fadeTween) },
+                                exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = navTween) + fadeOut(fadeTween) },
+                                popEnterTransition = { slideInHorizontally(initialOffsetX = { -it }, animationSpec = navTween) + fadeIn(fadeTween) },
+                                popExitTransition = { slideOutHorizontally(targetOffsetX = { it }, animationSpec = navTween) + fadeOut(fadeTween) }
+                            ) {
+                                val lockerManager = remember { LockerManager(context) }
+                                downloadsViewModel.videoToDelete?.let { video ->
+                                    AlertDialog(
+                                        onDismissRequest = { downloadsViewModel.videoToDelete = null },
+                                        icon = { Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete", tint = Color.Red) },
+                                        title = { Text("WARNING!", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold) },
+                                        text = {
+                                            Text(
+                                                "\"${video.title}\"\nSelected item will be permanently deleted.\nThis action cannot be undone.",
+                                                style = MaterialTheme.typography.bodyMedium,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                textAlign = TextAlign.Center
+                                            )
+                                        },
+                                        confirmButton = {
+                                            TextButton(onClick = { downloadsViewModel.deleteVideo(video) }) {
+                                                Text("Delete", color = Color.Red, fontWeight = FontWeight.Bold)
+                                            }
+                                        },
+                                        dismissButton = {
+                                            TextButton(onClick = { downloadsViewModel.videoToDelete = null }) {
+                                                Text("Cancel")
+                                            }
+                                        }
+                                    )
+                                }
+                                LockerScreen(
+                                    viewModel = lockerViewModel,
+                                    mainViewModel = mainViewModel,
+                                    imageLoader = imageLoader,
+                                    lockerManager = lockerManager,
+                                    activity = this@MainActivity,
+                                    onCancel = { navController.popBackStack() },
+                                    onVideoClick = { video ->
+                                        if (video.type == "audio") {
+                                            mainViewModel.requestAudioPlayback(video)
+                                        } else {
+                                            mainViewModel.openLocalVideo(video)
+                                        }
+                                        navController.popBackStack()
+                                    },
+                                    onDeleteVideo = { video -> downloadsViewModel.videoToDelete = video },
                                     sharedTransitionScope = this@SharedTransitionLayout,
                                     animatedVisibilityScope = this
                                 )
@@ -258,9 +355,11 @@ class MainActivity : AppCompatActivity() {
                                 VideoPlayerScreen(
                                     videoUrl = videoUrl,
                                     settingsManager = settingsManager,
+                                    videoRepository = videoRepository,
+                                    downloadRepository = downloadRepository,
                                     sharedTransitionScope = this@SharedTransitionLayout,
                                     animatedVisibilityScope = this,
-                            onBack = { navController.popBackStack() }
+                                    onBack = { navController.popBackStack() }
                                 )
                             }
                             composable(

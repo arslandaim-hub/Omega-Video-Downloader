@@ -14,12 +14,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.arslandaim.omegavideodownloader.SettingsManager
 import com.arslandaim.omegavideodownloader.VideoPlayer
+import com.arslandaim.omegavideodownloader.data.DownloadRepository
+import com.arslandaim.omegavideodownloader.data.VideoRepository
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun VideoPlayerScreen(
     videoUrl: String,
     settingsManager: SettingsManager,
+    videoRepository: VideoRepository,
+    downloadRepository: DownloadRepository,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onBack: () -> Unit
@@ -29,6 +33,12 @@ fun VideoPlayerScreen(
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        VideoPlayer(videoUrl = videoUrl, settingsManager = settingsManager, onBack = onBack)
+        VideoPlayer(
+            videoUrl = videoUrl,
+            settingsManager = settingsManager,
+            videoRepository = videoRepository,
+            downloadRepository = downloadRepository,
+            onBack = onBack
+        )
     }
 }

@@ -13,14 +13,17 @@ import java.io.StringWriter
 import java.util.Date
 import kotlin.system.exitProcess
 
-class OmegaCrashHandler(private val context: Context) : Thread.UncaughtExceptionHandler {
-    
+class OmegaCrashHandler(context: Context) : Thread.UncaughtExceptionHandler {
+
+    private val appContext = context.applicationContext
     private val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
 
     companion object {
         const val CRASH_FILE_NAME = "crash_report.txt"
-        
+
+        @Synchronized
         fun initialize(context: Context) {
+            if (Thread.getDefaultUncaughtExceptionHandler() is OmegaCrashHandler) return
             Thread.setDefaultUncaughtExceptionHandler(OmegaCrashHandler(context))
         }
 
@@ -43,17 +46,16 @@ class OmegaCrashHandler(private val context: Context) : Thread.UncaughtException
                 appendLine("Android Version: ${Build.VERSION.RELEASE}")
                 appendLine("API Level: ${Build.VERSION.SDK_INT}")
                 appendLine("--- STACK TRACE ---")
-                
+
                 val sw = StringWriter()
                 throwable.printStackTrace(PrintWriter(sw))
                 appendLine(sw.toString())
             }
 
-            File(context.cacheDir, CRASH_FILE_NAME).writeText(report)
-        } catch (e: Exception) {
-            // Fallback to avoid infinite crash loop during error handling
+            File(appContext.cacheDir, CRASH_FILE_NAME).writeText(report)
+        } catch (_: Exception) {
+            // Avoid infinite crash loop during error handling
         } finally {
-            // Pass to default handler or force exit
             if (defaultHandler != null) {
                 defaultHandler.uncaughtException(thread, throwable)
             } else {

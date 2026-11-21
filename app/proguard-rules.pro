@@ -16,20 +16,21 @@
 -keep class com.arslandaim.omegavideodownloader.ActiveDownload { *; }
 -keep class com.arslandaim.omegavideodownloader.VideoMetadata { *; }
 -keep class com.arslandaim.omegavideodownloader.VideoQuality { *; }
+-keep class com.arslandaim.omegavideodownloader.StreamCandidate { *; }
+-keep class com.arslandaim.omegavideodownloader.StreamKind { *; }
+-keep class com.arslandaim.omegavideodownloader.ResolveSource { *; }
+-keep class com.arslandaim.omegavideodownloader.MovieSearchResult { *; }
+-keep class com.arslandaim.omegavideodownloader.SearchSource { *; }
+-keep class com.arslandaim.omegavideodownloader.SearchFilter { *; }
+-keep class com.arslandaim.omegavideodownloader.WatchHistoryItem { *; }
+-keep class com.arslandaim.omegavideodownloader.LikedVideo { *; }
 
 -keepclassmembers class * {
     @com.google.gson.annotations.SerializedName <fields>;
 }
 
 # ==============================================================================
-# 3. Gson Rules
-# ==============================================================================
--keep class com.google.gson.** { *; }
--keep class sun.misc.Unsafe { *; }
--keep class com.google.gson.stream.** { *; }
-
-# ==============================================================================
-# 4. Native Binary Extraction & JNI (`youtubedl-android` / `yt-dlp` / `FFmpeg`)
+# 3. Native Binary Extraction & JNI (`youtubedl-android` / `yt-dlp` / `FFmpeg` / `aria2c`)
 # ==============================================================================
 -keep class com.yausername.** { *; }
 -dontwarn com.yausername.**
@@ -42,39 +43,18 @@
 }
 
 # ==============================================================================
-# 5. Media3 & ExoPlayer Rules
+# 4. Services & JavaScript Bridge (WebView Sniffer)
 # ==============================================================================
--keep class androidx.media3.** { *; }
--dontwarn androidx.media3.**
-
-# Keep MediaSessionService & MediaController callbacks
 -keep class com.arslandaim.omegavideodownloader.PlaybackService { *; }
 -keep class com.arslandaim.omegavideodownloader.DownloadService { *; }
 
-# ==============================================================================
-# 6. Coil Image Loading & Video Decoding
-# ==============================================================================
--keep class coil.** { *; }
--dontwarn coil.**
--keep class coil.decode.VideoFrameDecoder { *; }
+-keepclassmembers class com.arslandaim.omegavideodownloader.resolver.** {
+    @android.webkit.JavascriptInterface <methods>;
+}
 
-# ==============================================================================
-# 7. Networking (OkHttp) Rules
-# ==============================================================================
--keep class okhttp3.** { *; }
--keep interface okhttp3.** { *; }
--dontwarn okhttp3.**
-
-# ==============================================================================
-# 8. Biometric & DataStore Rules
-# ==============================================================================
--keep class androidx.biometric.** { *; }
--dontwarn androidx.biometric.**
-
--keep class androidx.datastore.** { *; }
--dontwarn androidx.datastore.**
-
-# ==============================================================================
-# 9. App Compat & Coroutines
-# ==============================================================================
+# Note: Media3, Coil, OkHttp, Gson, Biometric, and DataStore ship their own
+# consumer ProGuard rules; blanket -keep rules have been removed for R8 shrinking.
 -dontwarn kotlinx.coroutines.**
+-dontwarn org.conscrypt.**
+-dontwarn org.bouncycastle.**
+-dontwarn org.openjsse.**

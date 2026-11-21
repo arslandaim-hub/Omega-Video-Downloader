@@ -11,11 +11,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.OptIn
-import androidx.media3.common.AudioAttributes
-import androidx.media3.common.C
+import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.ExoPlayer
+import com.arslandaim.omegavideodownloader.player.OmegaPlayerFactory
+import com.arslandaim.omegavideodownloader.player.StreamRegistry
 import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
@@ -66,11 +66,7 @@ class PlaybackService : MediaSessionService() {
         super.onCreate()
         instance = this
         
-        val player = ExoPlayer.Builder(this)
-            .setAudioAttributes(AudioAttributes.DEFAULT, true)
-            .setWakeMode(C.WAKE_MODE_NETWORK)
-            .setHandleAudioBecomingNoisy(true)
-            .build()
+        val player = OmegaPlayerFactory.create(this)
 
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
@@ -98,6 +94,15 @@ class PlaybackService : MediaSessionService() {
                     .setAvailableSessionCommands(sessionCommands)
                     .setAvailablePlayerCommands(playerCommands)
                     .build()
+            }
+
+            override fun onAddMediaItems(
+                mediaSession: MediaSession,
+                controller: MediaSession.ControllerInfo,
+                mediaItems: MutableList<MediaItem>
+            ): ListenableFuture<MutableList<MediaItem>> {
+                // Restore URIs/MIME types for stream items whose local configuration was stripped
+                return Futures.immediateFuture(mediaItems.map { StreamRegistry.restore(it) }.toMutableList())
             }
 
             override fun onCustomCommand(
